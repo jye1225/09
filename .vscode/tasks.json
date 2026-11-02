@@ -1,0 +1,49 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build C",
+            "type": "process",
+            "command": "C:\\msys64\\ucrt64\\bin\\gcc.exe",
+            "args": [
+                "${fileBasename}",
+                "-g",
+                "-Wall",
+                "-fdebug-prefix-map=${fileDirname}=C:/codex-source",
+                "-o",
+                "${fileBasenameNoExtension}.exe"
+            ],
+            "options": {
+                "cwd": "${fileDirname}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "stage C debug executable",
+            "type": "process",
+            "command": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+            "args": [
+                "-NoProfile",
+                "-NonInteractive",
+                "-Command",
+                "Copy-Item -LiteralPath '${fileDirname}\\${fileBasenameNoExtension}.exe' -Destination '${env:TEMP}\\${fileBasenameNoExtension}.exe' -Force"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "prepare C debug",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "build C",
+                "stage C debug executable"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
